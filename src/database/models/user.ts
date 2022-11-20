@@ -1,13 +1,28 @@
-import { Table, Model, Column, DataType } from "sequelize-typescript";
+import { Table, Model, Column, AllowNull, NotEmpty } from "sequelize-typescript";
+
+export interface UserI {
+	userId: string;
+	email: string;
+	displayName: string;
+}
 
 @Table({
-	timestamps: false,
 	tableName: "user",
+	timestamps: true,
 })
-export class User extends Model {
-    @Column({
-        type: DataType.STRING,
-        allowNull: false,
-    })
-    name!: string;
+export default class User extends Model implements UserI {
+	@AllowNull(false)
+	@NotEmpty
+	@Column
+	userId!: string;
+
+	@AllowNull(false)
+	@NotEmpty
+	@Column
+	email!: string;
+
+	@AllowNull(false)
+	@NotEmpty
+	@Column
+	displayName!: string;
 }

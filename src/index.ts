@@ -1,9 +1,10 @@
 import { server_port } from "./config";
 import express, { NextFunction, Request, Response } from "express";
-import session from "express-session";
-import passport from "passport";
 import cors from "cors";
-import connection from "./database/dbConfig";
+import passport from "passport";
+import session from "express-session";
+const SequelizeStore = require("connect-session-sequelize")(session.Store);
+import db from "./database/dbConfig";
 
 // Routes
 import routes from "./routes/index";
@@ -14,7 +15,18 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(session({ secret: "O87GSEBTGO34HJTB3HTBV3IT4G87FVO879STSSIHRFSHBGIHBVS" }));
+app.use(
+	session({
+		secret: "O87GSEBTGO34HJTB3HTBV3IT4G87FVO879STSSIHRFSHBGIHBVS",
+		resave: false, // don't save session if unmodified
+		saveUninitialized: false, // don't create session until something stored
+		store: new SequelizeStore({
+			db: db.connection,
+			expiration: 315360000000,
+		}),
+		cookie: { maxAge: 315360000000 },
+	})
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -26,7 +38,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 app.use(routes);
 
 try {
-	connection.sync().then(() => {
+	db.connection.sync().then(() => {
 		console.log("Database synced successfully!");
 	});
 } catch (err) {

@@ -1,9 +1,11 @@
 import dotenv from "dotenv";
+import { Dialect } from "sequelize";
 
 dotenv.config();
 
 export const server_port = String(process.env.SERVER_PORT);
 
+export const db_dialect = process.env.DB_DIALECT as Dialect;
 export const db_host = String(process.env.DB_HOST);
 export const db_user = String(process.env.DB_USER);
 export const db_pass = String(process.env.DB_PASS);
