@@ -14,3 +14,7 @@ export const db_port = Number(process.env.DB_PORT);
 
 export const client_id = String(process.env.CLIENT_ID);
 export const client_secret = String(process.env.CLIENT_SECRET);
+
+export const client_url = String(process.env.CLIENT_URL);
+export const profile_url = String(process.env.PROFILE_URL);
+export const register_url = String(process.env.REGISTER_URL);

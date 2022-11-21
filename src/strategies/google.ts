@@ -6,27 +6,23 @@ import { UserI } from "../database/models/user";
 
 passport.serializeUser((user: any, cb) => {
 	console.log("Serializing User...");
-	console.log(user.dataValues);
 
-	cb(null, user);
+	cb(null, user.userId);
 });
 
-passport.deserializeUser((user: any, cb) => {
-	console.log("Deserializing User");
-	console.log(user);
+passport.deserializeUser(async (userId: string, cb) => {
+	console.log("Deserializing User...");
 
-	// try {
-	// 	const user = await db.models.User.findOne({ where: { userId: userId } });
+	try {
+		const user = await db.models.User.findOne({ where: { userId: userId } });
 
-	// 	if (!user) throw new Error("User not found");
+		if (!user) throw new Error("User not found");
 
-	// 	console.log(user.dataValues);
-	// 	cb(null, user);
-	// } catch (err) {
-	// 	console.log(err);
-	// 	cb(err, null);
-	// }
-	cb(null, user);
+		cb(null, user);
+	} catch (err) {
+		console.log(err);
+		cb(err, null);
+	}
 });
 
 passport.use(

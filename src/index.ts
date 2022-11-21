@@ -1,4 +1,4 @@
-import { server_port } from "./config";
+import { server_port, client_url } from "./config";
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import passport from "passport";
@@ -10,7 +10,12 @@ import db from "./database/dbConfig";
 import routes from "./routes/index";
 
 const app = express();
-app.use(cors());
+app.use(
+	cors({
+		origin: client_url,
+		credentials: true,
+	})
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
